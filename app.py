@@ -1,15 +1,19 @@
 from flask import Flask, request, jsonify, render_template
 import time, datetime, dateutil.parser
 from flask_cors import CORS
+from dotenv import load_dotenv
+load_dotenv()
 
 from meraki.util import init_meraki, get_snapshot
 
 app = Flask(__name__, static_url_path='/static')
 CORS(app)
 
-MERAKI_API_KEY = ""
+API_KEY = os.getenv("API_KEY")
+ORG_ID = os.getenv("ORG_ID")
 
-NETWORK_ID = "L_668784544664521658"
+# for network Aka - Wifi 
+NETWORK_ID = os.getenv("NET_ID")
 
 
 @app.route("/")
@@ -18,7 +22,7 @@ def index():
 
 
 @app.route('/networks/<networkId>/cameras/<camera_serial>/snapshot', methods=['GET'])
-def snapshot(networkId="L_668784544664521658", camera_serial="Q2EV-EVZJ-GQSS"):
+def snapshot(networkId=NETWORK_ID, camera_serial="Q2PV-2358-H3FE"):
 
     # get current timestamp
     utc_offset_sec = time.altzone if time.localtime().tm_isdst else time.timezone
